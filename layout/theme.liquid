@@ -36,11 +36,12 @@
     {% endcomment %}
     <meta charset="utf-8">
     {%- liquid
-      assign noindex_pages = 'error-page,test,collection-bundle,data-deletion-instructions,influencers,gift-box-builder,size-guide-cm-au-uk' | split: ','
       assign should_noindex = false
 
-      if template.name == 'page' and noindex_pages contains page.handle
-        assign should_noindex = true
+      if template.name == 'page'
+        if page.metafields.seo.noindex == true
+          assign should_noindex = true
+        endif
       endif
     -%}
     {% if should_noindex %}
