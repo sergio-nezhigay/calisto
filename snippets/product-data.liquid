@@ -47,8 +47,8 @@
     "url": {{ request.origin | append: product.url | json }},
     {%- if seo_media -%}
       "image": [
-        {% assign seo_image_url = seo_media | image_url: width: seo_media.preview_image.width | prepend: "https:" %}
-        {% render 'hs-image-transform' with img: seo_image_url | json %}
+      {% assign seo_image_url = seo_media | image_url: width: seo_media.preview_image.width | prepend: "https:" %}
+      {{ seo_image_url | json }}
       ],
     {%- endif -%}
     "description": {{ product.description | strip_html | json }},
