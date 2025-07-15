@@ -1,0 +1,89 @@
+{%- comment -%} snippets/schema-breadcrumb.liquid {%- endcomment -%}
+{% assign position = 1 %}
+
+{% assign shop_url = shop.url %}
+{% assign home_name = 'general.breadcrumbs.home' | t %}
+{% assign home_url = shop_url %}
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": {{ position }},
+        "name": {{ home_name | json }},
+        "item": "{{ home_url }}"
+      }
+      {%- assign position = position | plus: 1 -%}
+      {%- if template.name == 'collection' and collection -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ collection.title | json }},
+          "item": "{{ shop_url }}{{ collection.url }}"
+        }
+        {%- assign position = position | plus: 1 -%}
+      {%- elsif template.name == 'product' and product -%}
+        {%- if collection and collection.handle -%}
+          ,{
+            "@type": "ListItem",
+            "position": {{ position }},
+            "name": {{ collection.title | json }},
+            "item": "{{ shop_url }}{{ collection.url }}"
+          }
+          {%- assign position = position | plus: 1 -%}
+        {%- endif -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ product.title | json }},
+          "item": "{{ shop_url }}{{ product.url }}"
+        }
+      {%- elsif template.name == 'blog' and blog -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ blog.title | json }},
+          "item": "{{ shop_url }}{{ blog.url }}"
+        }
+      {%- elsif template.name == 'article' and article and blog -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ blog.title | json }},
+          "item": "{{ shop_url }}{{ blog.url }}"
+        }
+        {%- assign position = position | plus: 1 -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ article.title | json }},
+          "item": "{{ shop_url }}{{ article.url }}"
+        }
+      {%- elsif template.name == 'page' and page -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": {{ page.title | json }},
+          "item": "{{ shop_url }}{{ page.url }}"
+        }
+      {%- elsif template.name == 'search' -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": "Search",
+          "item": "{{ shop_url }}/search"
+        }
+      {%- elsif template.name == 'cart' -%}
+        ,{
+          "@type": "ListItem",
+          "position": {{ position }},
+          "name": "Cart",
+          "item": "{{ shop_url }}/cart"
+        }
+      {%- endif -%}
+    ]
+  }
+</script>
